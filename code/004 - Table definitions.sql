@@ -1,0 +1,69 @@
+/**
+ * Disciplina: Projeto de banco de dados I
+ * Autor: Leonardo E. Oliveira
+ *
+ * AD: 4
+ */
+
+ALTER TABLE TB_TELEFONE ADD CONSTRAINT pessoa_fk FOREIGN KEY (id_pessoa) REFERENCES TB_PESSOA(ID_PESSOA);
+ALTER TABLE TB_ENDERECO ADD CONSTRAINT pessoa_endereco_fk FOREIGN KEY (id_pessoa) REFERENCES TB_PESSOA(ID_PESSOA);
+ALTER TABLE TB_COMPRA ADD CONSTRAINT pessoa_compra_fk FOREIGN KEY (id_pessoa) REFERENCES TB_PESSOA(ID_PESSOA);
+ALTER TABLE TB_COMPRA ADD CONSTRAINT produto_compra_fk FOREIGN KEY (id_produto) REFERENCES TB_PRODUTO(ID_PRODUTO);
+
+ALTER TABLE TB_TELEFONE DROP CONSTRAINT pessoa_fk;
+ALTER TABLE TB_ENDERECO DROP CONSTRAINT pessoa_endereco_fk;
+ALTER TABLE TB_COMPRA DROP CONSTRAINT pessoa_compra_fk;
+ALTER TABLE TB_COMPRA DROP CONSTRAINT produto_compra_fk;
+
+DROP TABLE TB_COMPRA;
+DROP TABLE TB_ENDERECO;
+DROP TABLE TB_TELEFONE;
+DROP TABLE TB_PESSOA;
+DROP TABLE TB_PRODUTO;
+
+CREATE TABLE TB_PESSOA (
+	id_pessoa NUMBER(10),
+	nome VARCHAR2(100),
+	sobrenome VARCHAR2(100),
+	sexo CHAR,
+	dt_nascimento DATE,
+	deficiencia NUMBER(1),
+	CONSTRAINT pessoa_pk PRIMARY KEY(id_pessoa)
+);
+
+CREATE TABLE TB_TELEFONE (
+	id_telefone NUMBER(10),
+	id_pessoa NUMBER,
+	telefone NUMBER(11),
+	CONSTRAINT telefone_pk PRIMARY KEY(id_telefone),
+	CONSTRAINT pessoa_telefone_fk FOREIGN KEY(id_pessoa) REFERENCES TB_PESSOA(id_pessoa)
+);
+
+CREATE TABLE TB_ENDERECO (
+	id_endereco NUMBER(10),
+	id_pessoa NUMBER(10),
+	rua VARCHAR2(100),
+	bairro VARCHAR2(50),
+	cidade VARCHAR2(50),
+	cep VARCHAR2(15),
+	numero NUMBER(10),
+	CONSTRAINT endereco_pk PRIMARY KEY(id_endereco),
+	CONSTRAINT pessoa_endereco_fk FOREIGN KEY(id_pessoa) REFERENCES TB_PESSOA(id_pessoa)
+);
+
+CREATE TABLE TB_PRODUTO (
+	id_produto NUMBER(10),
+	descricao VARCHAR2(100),
+	preco NUMBER(10,2),
+	CONSTRAINT produto_pk PRIMARY KEY(id_produto)
+);
+
+CREATE TABLE TB_COMPRA (
+	id_compra NUMBER(10),
+	id_produto NUMBER(10),
+	id_pessoa NUMBER(10)
+	qtd NUMBER(10),
+	CONSTRAINT compra_pk PRIMARY KEY(id_compra),
+	CONSTRAINT produto_compra_fk FOREIGN KEY (APEX_040000.APEX_WS_DATA_GRID _produto) REFERENCES TB_PRODUTO(id_produto),
+	CONSTRAINT pessoa_compra_fk FOREIGN KEY (id_pessoa) REFERENCES TB_PESSOA(id_pessoa)
+);
